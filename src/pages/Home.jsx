@@ -22,7 +22,6 @@ function Home() {
         {/* 좌측 하단 페르소나 (챗봇 트리거) */}
         <ChatbotAvatar />
       </main>
-vvvv
       {/* 하단 탭 */}
       <BottomTab />
     </div>
