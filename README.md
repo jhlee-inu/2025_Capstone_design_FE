@@ -1,16 +1,36 @@
-# React + Vite
+<!-- # ![기봉사 판넬](https://github.com/user-attachments/assets/9d2e48de-7a73-4ee8-8b90-3f552e5cce3c) -->
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+🏃Members
 
-Currently, two official plugins are available:
+|                                                                        FE                                                                        |                                                                         FE                                                                          |                                                                         FE                                                                         |                                                                          BE                                                                           |
+| :----------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------: |
+| <a href="https://github.com/optshj"><img src="https://avatars.githubusercontent.com/u/105402944?v=4" alt="profile" width="140" height="140"></a> | <a href="https://github.com/jhlee-inu"><img src="https://avatars.githubusercontent.com/u/197494172?v=4" alt="profile" width="140" height="140"></a> | <a href="https://github.com/gyuri224"><img src="https://avatars.githubusercontent.com/u/176257557?v=4" alt="profile" width="140" height="140"></a> | <a href="https://github.com/RYUJEONGHUN"><img src="https://avatars.githubusercontent.com/u/192004734?v=4" alt="profile" width="140" height="140"></a> |
+|                                                      [이정환](https://github.com/jhlee-inu)                                                      |                                                       [이희원](https://github.com/dlgmldnjs)                                                        |                                                       [김재원](https://github.com/QAAAQ123)                                                        |                                                       [류정훈](https://github.com/RYUJEONGHUN)                                                        |
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# 기술스택
 
-## React Compiler
+| 프론트엔드
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React/vite
+- tailwind
 
-## Expanding the ESLint configuration
+| 디자인
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Figma
+
+# Commit Convention
+
+커밋 메시지를 작성하실 때 자세히 작성해준시다면 효율적인 작업에 도움이 됩니다.
+
+```
+커밋 컨벤션 예시
+git commit -m "[Feat] 카카오 api 추가"
+git commit -m "[Docs] /src/asset/charater.svg 추가"
+```
+
+- `Feat` : 새로운 기능 추가
+- `Fix` : 버그 수정
+- `Docs` : 문서 수정
+- `Style` : 코드 포맷팅, 세미콜론 누락, 코드 변경이 없는 경우
+- `Refactor` : 코드 리펙토링할 시
+- `Etc` : 기타
