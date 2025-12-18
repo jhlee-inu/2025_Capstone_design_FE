@@ -4,7 +4,7 @@ function mypage() {
     return (
     <div className="flex flex-col min-h-screen">
         {/* 헤더 */}    
-        <header className="h-14 flex items-center px-4 border-b bg-white z-10">
+        <header className="h-14 flex items-center justify-center border-b bg-white z-10">
             <h1 className="text-lg font-bold">마이페이지</h1>
         </header>
         {/* 콘텐츠 영역 */}

@@ -8,10 +8,10 @@ function ChatbotAvatar() {
     <>
       {/* 캐릭터 */}
       <div
-        className="absolute bottom-3 left-4 z-20 cursor-pointer"
+        className="absolute bottom-5 left-4 z-20 cursor-pointer"
         onClick={() => setOpen(true)}
       >
-        <img src={bear} alt="bear avatar" className="w-20 h-50 " />
+        <img src={bear} alt="bear avatar" className="w-28 h-55 " />
       </div>
 
       {/* 챗봇 */}
