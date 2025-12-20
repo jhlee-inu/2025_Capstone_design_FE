@@ -1,8 +1,20 @@
 import { useState } from "react";
 import ChatbotSheet from "./ChatbotSheet";
-import bear from "../assets/bear.png";
+import { usePersona } from "../context/PersonaContext";
+
 function ChatbotAvatar() {
   const [open, setOpen] = useState(false);
+  const { persona } = usePersona();
+
+  const personaImages = {
+    bear: "/src/assets/bear.png",
+    cat: "/src/assets/cat.png",
+    panda: "/src/assets/panda.png",
+    rabbit: "/src/assets/rabbit.png",
+    sasang: "/src/assets/sasang.png",
+  };
+
+  const avatarSrc = personaImages[persona] || "/src/assets/bear.png";
 
   return (
     <>
@@ -11,7 +23,7 @@ function ChatbotAvatar() {
         className="absolute bottom-5 left-4 z-20 cursor-pointer"
         onClick={() => setOpen(true)}
       >
-        <img src={bear} alt="bear avatar" className="w-28 h-55 " />
+        <img src={avatarSrc} alt="Persona avatar" className="w-28 h-55" />
       </div>
 
       {/* 챗봇 */}
