@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Agree from "../pages/Agree";
+import InfoInput from "../pages/InfoInput";
 import SasangTest from "../pages/SasangTest";
 import Persona from "../pages/Persona";
 import Mypage from "../pages/MyPage";
@@ -10,7 +11,6 @@ import Direction from "../pages/Direction";
 import TripEdit from "../pages/TripEdit";
 import TripAdd from "../pages/TripAdd";
 
-
 const AppRouter = () => {
   return (
     <Router>
@@ -18,6 +18,7 @@ const AppRouter = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/agree" element={<Agree />} />
+        <Route path="/InfoInput" element={<InfoInput />} />
         <Route path="/sasang-test" element={<SasangTest />} />
         <Route path="/persona" element={<Persona />} />
         <Route path="/home" element={<Home />} />

@@ -1,9 +1,9 @@
 import sasang from "../assets/sasang.png";
 import kakaoIcon from "../assets/kakao.png";
 import googleIcon from "../assets/google.png";
-import { MdLanguage } from "react-icons/md";
-import React, { useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
+import { useNavigate } from "react-router-dom";
+import LoginHeader from "../components/auth/LoginHeader";
 
 const TEXT = {
   KOR: {
@@ -20,43 +20,17 @@ const TEXT = {
   },
 };
 
-
 function Login() {
-  const [langOpen, setLangOpen] = useState(false);
-  const { language, setLanguage } = useLanguage();
+  const { language } = useLanguage();
+  const navigate = useNavigate();
+
+  const handleKakao = () => navigate("/agree");
+  const handleGoogle = () => navigate("/agree");
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* 헤더 */}
-      <header className="h-14 flex items-center justify-between px-4 pt-3 border-b bg-white relative">
-        <h1 className="text-lg font-bold">Incheon Mate</h1>
-
-        <div className="relative">
-          <button
-            onClick={() => setLangOpen((prev) => !prev)}
-            className="flex items-center gap-1 text-sm font-semibold"
-          >
-            <MdLanguage size={22} />
-            {language}
-          </button>
-
-          {langOpen && (
-            <div className="absolute right-0 mt-2 w-20 rounded-xl border bg-white shadow-md">
-              {["KOR", "ENG"].map((lang) => (
-                <button
-                  key={lang}
-                  onClick={() => {
-                    setLanguage(lang);
-                    setLangOpen(false);
-                  }}
-                  className="w-full px-3 py-2 text-sm text-left hover:bg-gray-100 first:rounded-t-xl last:rounded-b-xl"
-                >
-                  {lang}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </header>
+      <LoginHeader />
 
       {/* 본문 */}
       <main className="px-6 flex-1">
@@ -77,6 +51,7 @@ function Login() {
           {/* Kakao */}
           <button
             type="button"
+            onClick={handleKakao}
             className="h-12 w-full rounded-2xl bg-[#FEE500]
                    flex items-center justify-center gap-2
                    font-extrabold active:scale-[0.99]"
@@ -88,6 +63,7 @@ function Login() {
           {/* Google */}
           <button
             type="button"
+            onClick={handleGoogle}
             className="h-12 w-full rounded-2xl border border-gray-200 bg-white
                    flex items-center justify-center gap-2
                    font-extrabold active:scale-[0.99]"
