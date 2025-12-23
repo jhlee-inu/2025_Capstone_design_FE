@@ -87,12 +87,6 @@ function ChatbotSheet({ onClose }) {
         </div>
 
         {/* 닫기 버튼 */}
-        <button
-          className="absolute top-4 right-4 text-gray-400"
-          onClick={onClose}
-        >
-          ✕
-        </button>
       </motion.div>
     </motion.div>
   );

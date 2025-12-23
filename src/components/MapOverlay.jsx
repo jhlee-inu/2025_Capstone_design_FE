@@ -13,15 +13,15 @@ function MapOverlay() {
     <>
       {/* 상단 카테고리 */}
       <div className="absolute top-4 left-4 flex gap-2 z-10">
-        <button className="px-3 py-1 bg-white rounded-full shadow text-sm">
+        <button className="px-3 py-1 bg-white font-medium rounded-full shadow text-sm">
           <MdOutlineRestaurant className="inline-block mr-1 text-red-400" />
           음식점
         </button>
-        <button className="px-3 py-1 bg-white rounded-full shadow text-sm">
+        <button className="px-3 py-1 bg-white font-medium rounded-full shadow text-sm">
           <BiSolidCoffeeAlt className="inline-block mr-1 text-yellow-400 " />
           카페
         </button>
-        <button className="px-3 py-1 bg-white rounded-full shadow text-sm">
+        <button className="px-3 py-1 bg-white font-medium rounded-full shadow text-sm">
           <FaLandmark className="inline-block mr-1 text-blue-500" />
           관광지
         </button>

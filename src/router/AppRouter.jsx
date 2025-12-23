@@ -1,12 +1,15 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from '../pages/Home';
-import Login from '../pages/Login';
-import Agree from '../pages/Agree';
-import SasangTest from '../pages/SasangTest';
-import Persona from '../pages/Persona';
-import Mypage from '../pages/MyPage';
-import Trip from '../pages/Trip';  
-import Direction from '../pages/Direction';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "../pages/Home";
+import Login from "../pages/Login";
+import Agree from "../pages/Agree";
+import SasangTest from "../pages/SasangTest";
+import Persona from "../pages/Persona";
+import Mypage from "../pages/MyPage";
+import Trip from "../pages/Trip";
+import Direction from "../pages/Direction";
+import TripEdit from "../pages/TripEdit";
+import TripAdd from "../pages/TripAdd";
+
 
 const AppRouter = () => {
   return (
@@ -18,9 +21,11 @@ const AppRouter = () => {
         <Route path="/sasang-test" element={<SasangTest />} />
         <Route path="/persona" element={<Persona />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/trip" element={<Trip/>} />
         <Route path="/direction" element={<Direction />} />
         <Route path="/mypage" element={<Mypage />} />
+        <Route path="/trip" element={<Trip />} />
+        <Route path="/trip/edit" element={<TripEdit />} />
+        <Route path="/trip/add" element={<TripAdd />} />
       </Routes>
     </Router>
   );
