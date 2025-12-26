@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { IoIosReverseCamera } from "react-icons/io";
 import { usePersona } from "../context/PersonaContext";
 
 function CameraOverlay({ onClose }) {
@@ -12,12 +13,13 @@ function CameraOverlay({ onClose }) {
   const [snapshot, setSnapshot] = useState("");
   const [personaPosition, setPersonaPosition] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
+  const [facingMode, setFacingMode] = useState("environment"); //기본은 후면 카메라
   const mediaSupported =
     typeof navigator !== "undefined" &&
     navigator.mediaDevices &&
     navigator.mediaDevices.getUserMedia;
 
-  const avatarSize = 96;
+  const avatarSize = 144; // 아바타 사이즈
 
   const personaImages = {
     bear: "/src/assets/bear.png",
@@ -32,9 +34,10 @@ function CameraOverlay({ onClose }) {
     let cancelled = false;
 
     const requestStream = async () => {
+      const preferredMode = facingMode;
       const constraintsList = [
-        { video: { facingMode: { exact: "environment" } }, audio: false },
-        { video: { facingMode: { ideal: "environment" } }, audio: false },
+        { video: { facingMode: { exact: preferredMode } }, audio: false }, //우선 후면으로 시도
+        { video: { facingMode: { ideal: preferredMode } }, audio: false },
         { video: true, audio: false },
       ];
 
@@ -80,7 +83,7 @@ function CameraOverlay({ onClose }) {
         streamRef.current = null;
       }
     };
-  }, [mediaSupported]);
+  }, [mediaSupported, facingMode]);
 
   const avatarSrc = personaImages[persona] || personaImages.bear;
 
@@ -89,8 +92,8 @@ function CameraOverlay({ onClose }) {
 
     const rect = containerRef.current.getBoundingClientRect();
     setPersonaPosition({
-      x: Math.max(0, rect.width - avatarSize - 16),
-      y: Math.max(0, rect.height - avatarSize - 16),
+      x: Math.max(0, rect.width - avatarSize),
+      y: Math.max(0, rect.height - avatarSize-10),
     });
   }, [avatarSize]);
 
@@ -156,13 +159,21 @@ function CameraOverlay({ onClose }) {
 
     const img = new Image();
     img.onload = () => {
-      ctx.drawImage(
-        img,
-        personaPosition.x,
-        personaPosition.y,
-        avatarSize,
-        avatarSize
-      );
+      // 아바타 그리기, 이미지 비율 유지
+      const aspect = img.naturalWidth / img.naturalHeight;
+      let drawWidth = avatarSize;
+      let drawHeight = avatarSize;
+
+      if (aspect >= 1) {
+        drawHeight = avatarSize / aspect;
+      } else {
+        drawWidth = avatarSize * aspect;
+      }
+
+      const offsetX = personaPosition.x + (avatarSize - drawWidth) / 2;
+      const offsetY = personaPosition.y + (avatarSize - drawHeight) / 2;
+
+      ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
       setSnapshot(canvas.toDataURL("image/png"));
     };
     img.src = avatarSrc;
@@ -174,6 +185,12 @@ function CameraOverlay({ onClose }) {
     link.href = snapshot;
     link.download = "snapshot.png";
     link.click();
+  };
+
+  const handleToggleFacingMode = () => {
+    setError("");
+    setLoading(true);
+    setFacingMode((prev) => (prev === "environment" ? "user" : "environment"));
   };
 
   return (
@@ -209,7 +226,7 @@ function CameraOverlay({ onClose }) {
         <img
           src={avatarSrc}
           alt="persona"
-          className="absolute w-50 h-50 object-contain drop-shadow cursor-grab active:cursor-grabbing touch-none"
+          className="absolute w-36 h-36 object-contain drop-shadow cursor-grab active:cursor-grabbing touch-none"
           style={{ left: personaPosition.x, top: personaPosition.y }}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
@@ -219,8 +236,8 @@ function CameraOverlay({ onClose }) {
         />
 
         {snapshot && (
-          <div className="absolute bottom-6 left-4 h-16 w-16 overflow-hidden rounded-lg border border-white/70 bg-black/40">
-            <img
+          <div className="absolute bottom-6 left-4 h-50 w-16 overflow-hidden rounded-lg border border-white/70 bg-black/40">
+            <img // 미리보기 이미지
               src={snapshot}
               alt="snapshot preview"
               className="h-full w-full object-cover"
@@ -255,6 +272,15 @@ function CameraOverlay({ onClose }) {
           aria-label="close camera"
         >
           X
+        </button>
+        <button
+          type="button"
+          onClick={handleToggleFacingMode} // 카메라 전환
+          className="absolute top-16 right-4 h-10 w-10 rounded-full bg-white text-black flex items-center justify-center disabled:opacity-50"
+          aria-label="switch camera"
+          disabled={!mediaSupported}
+        >
+          <IoIosReverseCamera size={25} />
         </button>
       </div>
     </div>
