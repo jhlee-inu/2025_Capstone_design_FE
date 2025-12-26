@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { usePersona } from "../context/PersonaContext";
 import bearHero from "../assets/bear.png";
 import rabbitHero from "../assets/rabbit.png";
 import pandaHero from "../assets/panda.png";
@@ -21,6 +22,7 @@ const PERSONAS = [
     thumbBg: "bg-rose-100",
     hero: bearHero,
     thumb: bearThumb,
+    key: "bear",
   },
   {
     id: "토끼",
@@ -29,6 +31,7 @@ const PERSONAS = [
     thumbBg: "bg-yellow-50",
     hero: rabbitHero,
     thumb: rabbitThumb,
+    key: "rabbit",
   },
   {
     id: "판다",
@@ -37,6 +40,7 @@ const PERSONAS = [
     thumbBg: "bg-emerald-50",
     hero: pandaHero,
     thumb: pandaThumb,
+    key: "panda",
   },
   {
     id: "고양이",
@@ -45,25 +49,32 @@ const PERSONAS = [
     thumbBg: "bg-purple-50",
     hero: catHero,
     thumb: catThumb,
+    key: "cat",
   },
 ];
 
 export default function Persona() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { persona, setPersona } = usePersona();
 
-  const initial = location.state?.selected || PERSONAS[0].id;
-  const [selected, setSelected] = useState(initial);
+  const initialKey =
+    location.state?.selectedKey ||
+    PERSONAS.find((p) => p.id === location.state?.selected)?.key ||
+    persona ||
+    PERSONAS[0].key;
+  const [selectedKey, setSelectedKey] = useState(initialKey);
 
   const hero = useMemo(
-    () => PERSONAS.find((p) => p.id === selected) || PERSONAS[0],
-    [selected]
+    () => PERSONAS.find((p) => p.key === selectedKey) || PERSONAS[0],
+    [selectedKey]
   );
 
   const onConfirm = () => {
-    if (!selected) return;
+    if (!selectedKey) return;
     // InfoInput으로 돌아가면서 선택값 전달
-    navigate(-1, { state: { persona: selected } });
+    setPersona(selectedKey);
+    navigate(-1, { state: { persona: hero.id, personaKey: selectedKey } });
   };
 
   return (
@@ -95,13 +106,13 @@ export default function Persona() {
       <main className="px-6 mt-10">
         <div className="grid grid-cols-2 gap-4">
           {PERSONAS.map((p) => {
-            const isSelected = p.id === selected;
+            const isSelected = p.key === selectedKey;
 
             return (
               <button
-                key={p.id}
+                key={p.key}
                 type="button"
-                onClick={() => setSelected(p.id)}
+                onClick={() => setSelectedKey(p.key)}
                 className={clsx(
                   "rounded-3xl bg-white shadow-sm border transition p-5",
                   isSelected ? "border-blue-500" : "border-transparent"

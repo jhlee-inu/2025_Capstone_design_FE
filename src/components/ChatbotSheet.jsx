@@ -11,7 +11,7 @@ function ChatbotSheet({ onClose }) {
     rabbit: "/src/assets/chat rabbit.png",
   };
 
-  const avatarSrc = chatpersonaImages[persona] || "/src/assets/bear.png";
+  const avatarSrc = chatpersonaImages[persona] || "/src/assets/chat bear.png";
   return (
     // 배경
     <motion.div
@@ -51,7 +51,7 @@ function ChatbotSheet({ onClose }) {
           {/* 챗봇 메시지 */}
           <div className="flex items-start space-x-2 mb-4">
             <img
-              src="/src/assets/chat bear.png"
+              src={avatarSrc}
               alt="Persona"
               className="w-10 h-10 object-contain"
             />
@@ -61,7 +61,7 @@ function ChatbotSheet({ onClose }) {
           </div>
           <div className="flex items-start space-x-2 mb-4">
             <img
-              src="/src/assets/chat bear.png"
+              src={avatarSrc}
               alt="Persona"
               className="w-10 h-10 object-contain"
             />

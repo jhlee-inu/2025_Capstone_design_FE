@@ -1,6 +1,6 @@
 import BottomTab from "../components/BottomTab";
 
-function direction() {
+function Direction() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* 헤더 */}
@@ -16,4 +16,4 @@ function direction() {
     </div>
   );
 }
-export default direction;
+export default Direction;

@@ -11,10 +11,9 @@ function ChatbotAvatar() {
     cat: "/src/assets/cat.png",
     panda: "/src/assets/panda.png",
     rabbit: "/src/assets/rabbit.png",
-    sasang: "/src/assets/sasang.png",
   };
 
-  const avatarSrc = personaImages[persona] || "/src/assets/bear.png";
+  const avatarSrc = personaImages[persona] || "/src/assets/rabbit.png";
 
   return (
     <>

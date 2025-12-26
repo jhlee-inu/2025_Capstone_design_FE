@@ -1,6 +1,6 @@
 import BottomTab from "../components/BottomTab";
 
-function mypage() {
+function MyPage() {
     return (
     <div className="flex flex-col min-h-screen">
         {/* 헤더 */}    
@@ -16,4 +16,4 @@ function mypage() {
     </div>
     );  
 }   
-export default mypage;
+export default MyPage;

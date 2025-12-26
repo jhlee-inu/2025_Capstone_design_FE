@@ -26,7 +26,8 @@ const AppRouter = () => {
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/trip" element={<Trip />} />
         <Route path="/trip/edit" element={<TripEdit />} />
-        <Route path="/trip/add" element={<TripAdd />} />
+        <Route path="/trip/add/place" element={<TripAdd type="place" />} />
+        <Route path="/trip/add/food" element={<TripAdd type="food" />} />
       </Routes>
     </Router>
   );

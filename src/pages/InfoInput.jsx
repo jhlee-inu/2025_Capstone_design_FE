@@ -1,5 +1,6 @@
-import { useMemo, useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { usePersona } from "../context/PersonaContext";
 
 import Modal from "../components/auth/Modal";
 import NicknameField from "../components/auth/NicknameField";
@@ -16,7 +17,7 @@ function clsx(...arr) {
 
 export default function InfoInput() {
   const navigate = useNavigate();
-  const location = useLocation();
+  const { persona } = usePersona();
 
   // ===== 입력값 =====
   const [nickname, setNickname] = useState("");
@@ -33,21 +34,8 @@ export default function InfoInput() {
   const [companion, setCompanion] = useState("");
 
   const [sasangResult, setSasangResult] = useState("");
-  const [persona, setPersona] = useState("");
-
   const [active, setActive] = useState("");
   const [sasangOpen, setSasangOpen] = useState(false);
-
-  // ===== persona 페이지에서 돌아올 때 =====
-  useEffect(() => {
-    const selectedPersona = location.state?.persona;
-    if (selectedPersona) {
-      setPersona(selectedPersona);
-
-      // state 중복 적용 방지
-      navigate(location.pathname, { replace: true, state: {} });
-    }
-  }, [location.state, location.pathname, navigate]);
 
   // ===== validation =====
   const nicknameValid = nickname.trim().length >= 2;
@@ -171,7 +159,7 @@ export default function InfoInput() {
           value={persona}
           onClick={() =>
             navigate("/persona", {
-              state: { selected: persona },
+              state: { selectedKey: persona },
             })
           }
         />
