@@ -93,7 +93,7 @@ function CameraOverlay({ onClose }) {
     const rect = containerRef.current.getBoundingClientRect();
     setPersonaPosition({
       x: Math.max(0, rect.width - avatarSize),
-      y: Math.max(0, rect.height - avatarSize-10),
+      y: Math.max(0, rect.height - avatarSize - 10),
     });
   }, [avatarSize]);
 

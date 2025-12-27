@@ -20,12 +20,20 @@ const TEXT = {
   },
 };
 
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 function Login() {
   const { language } = useLanguage();
   const navigate = useNavigate();
 
-  const handleKakao = () => navigate("/agree");
-  const handleGoogle = () => navigate("/agree");
+  // const handleKakao = () => navigate("/agree");
+  // const handleGoogle = () => navigate("/agree");
+  const handleKakao = () => {
+    window.location.href = `${baseUrl}/oauth2/authorization/kakao`;
+  };
+
+  const handleGoogle = () => {
+    window.location.href = `${baseUrl}/oauth2/authorization/google`;
+  };
 
   return (
     <div className="flex flex-col min-h-screen">

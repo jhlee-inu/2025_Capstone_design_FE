@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Agree from "../pages/Agree";
+import OAuthCallback from "../pages/OAuthCallback";
 import InfoInput from "../pages/InfoInput";
 import SasangTest from "../pages/SasangTest";
 import Persona from "../pages/Persona";
@@ -17,6 +18,7 @@ const AppRouter = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/oauth/callback" element={<OAuthCallback />} />
         <Route path="/agree" element={<Agree />} />
         <Route path="/InfoInput" element={<InfoInput />} />
         <Route path="/sasang-test" element={<SasangTest />} />
