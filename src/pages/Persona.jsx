@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { usePersona } from "../context/PersonaContext";
+import useSignupStore from "../stores/useSignupStore";
+
 import bearHero from "../assets/bear.png";
 import rabbitHero from "../assets/rabbit.png";
 import pandaHero from "../assets/panda.png";
@@ -55,14 +57,16 @@ const PERSONAS = [
 
 export default function Persona() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { persona, setPersona } = usePersona();
 
-  const initialKey =
-    location.state?.selectedKey ||
-    PERSONAS.find((p) => p.id === location.state?.selected)?.key ||
-    persona ||
-    PERSONAS[0].key;
+  // ==== context & zustand store 상태 ====
+  const { persona } = usePersona();
+  const {personaKey, setPersonaKey} = useSignupStore((s) => ({
+    personaKey: s.personaKey,
+    setPersonaKey: s.setPersonaKey,
+  }));
+
+  // ==== UI 로컬 상태 ====
+  const initialKey = personaKey || persona || PERSONAS[0].key;
   const [selectedKey, setSelectedKey] = useState(initialKey);
 
   const hero = useMemo(
@@ -70,10 +74,12 @@ export default function Persona() {
     [selectedKey]
   );
 
+
   const onConfirm = () => {
     if (!selectedKey) return;
-    // InfoInput으로 돌아가면서 선택값 전달
-    setPersona(selectedKey);
+    
+    // 선택한 페르소나 저장 후 이전 페이지로 이동
+    setPersonaKey(selectedKey);
     navigate(-1, { state: { persona: hero.id, personaKey: selectedKey } });
   };
 

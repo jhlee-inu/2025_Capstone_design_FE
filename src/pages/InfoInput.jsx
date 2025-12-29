@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePersona } from "../context/PersonaContext";
+import useSignupStore from "../stores/useSignupStore";
 
 import Modal from "../components/auth/Modal";
 import NicknameField from "../components/auth/NicknameField";
@@ -17,25 +18,42 @@ function clsx(...arr) {
 
 export default function InfoInput() {
   const navigate = useNavigate();
-  const { persona } = usePersona();
 
-  // ===== 입력값 =====
-  const [nickname, setNickname] = useState("");
-  const [nicknameChecked, setNicknameChecked] = useState(false);
-  const [nicknameAvailable, setNicknameAvailable] = useState(null);
+  // ==== Context ====
+  const { setPersona } = usePersona();
 
-  const [birth, setBirth] = useState("");
-  const [mbti, setMbti] = useState("");
+  // ==== zustand store 상태 ====
+  const {
+    nickname,
+    nicknameChecked,
+    nicknameAvailable,
+    birth,
+    mbti,
+    photoFile,
+    skipPhoto,
+    companion,
+    sasangResult,
+    personaKey,
+    patch,
+  } = useSignupStore((s) => ({
+    nickname: s.nickname,
+    nicknameChecked: s.nicknameChecked,
+    nicknameAvailable: s.nicknameAvailable,
+    birth: s.birth,
+    mbti: s.mbti,
+    photoFile: s.photoFile,
+    skipPhoto: s.skipPhoto,
+    companion: s.companion,
+    sasangResult: s.sasangResult,
+    personaKey: s.personaKey,
+    patch: s.patch,
+  }));
 
-  const [photoFile, setPhotoFile] = useState(null);
-  const [skipPhoto, setSkipPhoto] = useState(false);
-
-  const companions = ["혼자", "가족", "연인", "친구"];
-  const [companion, setCompanion] = useState("");
-
-  const [sasangResult, setSasangResult] = useState("");
+  // ==== UI 로컬 상태 ====
   const [active, setActive] = useState("");
   const [sasangOpen, setSasangOpen] = useState(false);
+
+  const companions = ["혼자", "가족", "연인", "친구"];
 
   // ===== validation =====
   const nicknameValid = nickname.trim().length >= 2;
@@ -43,20 +61,26 @@ export default function InfoInput() {
   const mbtiValid = /^[EI][NS][FT][PJ]$/i.test(mbti.trim());
 
   const onNicknameChange = (v) => {
-    setNickname(v);
-    setNicknameChecked(false);
-    setNicknameAvailable(null);
+    patch({
+      nickname: v,
+      nicknameChecked: false,
+      nicknameAvailable: null,
+    });
   };
 
   const checkNickname = () => {
     if (!nicknameValid) return;
-    setNicknameChecked(true);
 
-    // 중복 검사
+    // 중복검사 (임시) 
     const ok = !nickname.includes("사용자");
-    setNicknameAvailable(ok);
+
+    patch({
+      nicknameChecked: true,
+      nicknameAvailable: ok,
+    });
   };
 
+  // ===== 가입 가능 여부 =====
   const canSubmit = useMemo(() => {
     const nicknameOk =
       nicknameValid && nicknameChecked && nicknameAvailable === true;
@@ -67,7 +91,7 @@ export default function InfoInput() {
       mbtiValid &&
       !!companion &&
       !!sasangResult &&
-      !!persona
+      !!personaKey
     );
   }, [
     nicknameValid,
@@ -77,11 +101,14 @@ export default function InfoInput() {
     mbtiValid,
     companion,
     sasangResult,
-    persona,
+    personaKey,
   ]);
 
   const onSubmit = () => {
     if (!canSubmit) return;
+
+    // PersonaContext에 반영
+    setPersona(personaKey)
 
     // 가입 정보 POST
     navigate("/home");
@@ -120,7 +147,7 @@ export default function InfoInput() {
 
         <BirthField
           value={birth}
-          setValue={setBirth}
+          setValue={(v) => patch({ birth: v })}
           active={active === "birth"}
           onFocus={() => setActive("birth")}
           onBlur={() => setActive("")}
@@ -129,7 +156,7 @@ export default function InfoInput() {
 
         <MbtiField
           value={mbti}
-          setValue={setMbti}
+          setValue={(v) => patch({ mbti: v })}
           active={active === "mbti"}
           onFocus={() => setActive("mbti")}
           onBlur={() => setActive("")}
@@ -138,15 +165,15 @@ export default function InfoInput() {
 
         <PhotoUpload
           photoFile={photoFile}
-          setPhotoFile={setPhotoFile}
+          setPhotoFile={(f) => patch({ photoFile: f })}
           skipPhoto={skipPhoto}
-          setSkipPhoto={setSkipPhoto}
+          setSkipPhoto={(b) => patch({ skipPhoto: b })}
         />
 
         <CompanionSelector
           companions={companions}
           value={companion}
-          setValue={setCompanion}
+          setValue={(v) => patch({ companion: v })}
         />
 
         <SasangTestButton
@@ -154,14 +181,11 @@ export default function InfoInput() {
           onClick={() => setSasangOpen(true)}
         />
 
-        {/* 페이지 이동 */}
+        {/* 페르소나 선택 페이지로 이동 */}
         <PersonaButton
-          value={persona}
+          value={personaKey}
           onClick={() =>
-            navigate("/persona", {
-              state: { selectedKey: persona },
-            })
-          }
+            navigate("/persona")}
         />
 
         <div className="h-10" />
@@ -184,7 +208,7 @@ export default function InfoInput() {
         </button>
       </div>
 
-      {/* 사상의학 모달 (유지) */}
+      {/* 사상의학 모달 */}
       {sasangOpen && (
         <Modal title="사상의학 테스트" onClose={() => setSasangOpen(false)}>
           <div className="grid grid-cols-2 gap-2">
@@ -192,7 +216,7 @@ export default function InfoInput() {
               <button
                 key={v}
                 onClick={() => {
-                  setSasangResult(v);
+                  patch({ sasangResult: v });
                   setSasangOpen(false);
                 }}
                 className="h-12 rounded-2xl border font-extrabold"
