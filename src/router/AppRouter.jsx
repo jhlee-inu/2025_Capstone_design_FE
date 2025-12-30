@@ -5,6 +5,7 @@ import Agree from "../pages/Agree";
 import OAuthCallback from "../pages/OAuthCallback";
 import InfoInput from "../pages/InfoInput";
 import SasangTest from "../pages/SasangTest";
+import SasangResult from "../pages/SasangResult";
 import Persona from "../pages/Persona";
 import Mypage from "../pages/MyPage";
 import Trip from "../pages/Trip";
@@ -22,6 +23,7 @@ const AppRouter = () => {
         <Route path="/agree" element={<Agree />} />
         <Route path="/InfoInput" element={<InfoInput />} />
         <Route path="/sasang-test" element={<SasangTest />} />
+        <Route path="/sasang-result" element={<SasangResult />} />
         <Route path="/persona" element={<Persona />} />
         <Route path="/home" element={<Home />} />
         <Route path="/direction" element={<Direction />} />

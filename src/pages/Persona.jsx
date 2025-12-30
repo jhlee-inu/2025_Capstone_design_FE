@@ -11,6 +11,7 @@ import bearThumb from "../assets/chat bear.png";
 import rabbitThumb from "../assets/chat rabbit.png";
 import pandaThumb from "../assets/chat panda.png";
 import catThumb from "../assets/chat cat.png";
+import { FaArrowLeft } from "react-icons/fa6";
 
 function clsx(...arr) {
   return arr.filter(Boolean).join(" ");
@@ -60,7 +61,7 @@ export default function Persona() {
 
   // ==== context & zustand store 상태 ====
   const { persona } = usePersona();
-  const {personaKey, setPersonaKey} = useSignupStore((s) => ({
+  const { personaKey, setPersonaKey } = useSignupStore((s) => ({
     personaKey: s.personaKey,
     setPersonaKey: s.setPersonaKey,
   }));
@@ -74,33 +75,36 @@ export default function Persona() {
     [selectedKey]
   );
 
-
   const onConfirm = () => {
     if (!selectedKey) return;
-    
+
     // 선택한 페르소나 저장 후 이전 페이지로 이동
     setPersonaKey(selectedKey);
     navigate(-1, { state: { persona: hero.id, personaKey: selectedKey } });
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="flex flex-col min-h-screen bg-white">
       {/* 상단바 */}
       <header className="h-12 flex items-center px-4">
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="text-2xl font-bold leading-none"
-          aria-label="back"
+          className="flex items-center justify-center"
         >
-          ←
+          <FaArrowLeft size={20} />
         </button>
         <h1 className="flex-1 text-center font-extrabold">페르소나 선택</h1>
         <div className="w-8" />
       </header>
 
       {/* 상단 영역 */}
-      <section className={clsx("h-56 w-full flex items-center justify-center", hero.heroBg)}>
+      <section
+        className={clsx(
+          "h-56 w-full flex items-center justify-center",
+          hero.heroBg
+        )}
+      >
         <img
           src={hero.hero}
           alt={`${hero.id} hero`}
@@ -108,8 +112,8 @@ export default function Persona() {
         />
       </section>
 
-      {/* 카드 영역 + 하단 버튼 */}
-      <main className="px-6 mt-10">
+      {/* 카드 영역 */}
+      <main className="flex-1 px-6 mt-10">
         <div className="grid grid-cols-2 gap-4">
           {PERSONAS.map((p) => {
             const isSelected = p.key === selectedKey;
@@ -124,9 +128,14 @@ export default function Persona() {
                   isSelected ? "border-blue-500" : "border-transparent"
                 )}
               >
-                {/* thumb 원형 배경 + 얼굴 아이콘 */}
+                {/* 원형 배경 + 얼굴 아이콘 */}
                 <div className="flex justify-center">
-                  <div className={clsx("h-16 w-16 rounded-full grid place-items-center", p.thumbBg)}>
+                  <div
+                    className={clsx(
+                      "h-16 w-16 rounded-full grid place-items-center",
+                      p.thumbBg
+                    )}
+                  >
                     <img
                       src={p.thumb}
                       alt={`${p.id} thumb`}
@@ -145,18 +154,18 @@ export default function Persona() {
             );
           })}
         </div>
-
-        {/* 하단 버튼 */}
-        <div className="mt-40 pb-6">
-          <button
-            type="button"
-            onClick={onConfirm}
-            className="h-14 w-full rounded-2xl bg-blue-600 text-white font-extrabold"
-          >
-            선택하기
-          </button>
-        </div>
       </main>
+
+      {/* 하단 버튼 */}
+      <div className="px-6 pb-14">
+        <button
+          type="button"
+          onClick={onConfirm}
+          className="h-14 w-full rounded-2xl bg-blue-600 text-white font-extrabold"
+        >
+          선택하기
+        </button>
+      </div>
     </div>
   );
 }

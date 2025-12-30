@@ -11,6 +11,7 @@ import PhotoUpload from "../components/auth/PhotoUpload";
 import CompanionSelector from "../components/auth/CompanionSelector";
 import SasangTestButton from "../components/auth/SasangTestButton";
 import PersonaButton from "../components/auth/PersonaButton";
+import { FaArrowLeft } from "react-icons/fa6";
 
 function clsx(...arr) {
   return arr.filter(Boolean).join(" ");
@@ -121,9 +122,9 @@ export default function InfoInput() {
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="text-2xl font-bold"
+          className="flex items-center justify-center"
         >
-          ←
+          <FaArrowLeft size={20} />
         </button>
 
         <h1 className="mt-5 text-lg font-extrabold">
