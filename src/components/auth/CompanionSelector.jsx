@@ -1,6 +1,3 @@
-import React from "react";
-import Label from "./Label";
-
 function clsx(...arr) {
   return arr.filter(Boolean).join(" ");
 }
@@ -12,7 +9,9 @@ export default function CompanionSelector({
 }) {
   return (
     <div>
-      <Label>동반자</Label>
+      <div className="mt-6 mb-2 text-sm font-extrabold">
+        동반자
+      </div>
       <div className="flex gap-2">
         {options.map((c) => {
           const selected = value === c;
@@ -22,7 +21,7 @@ export default function CompanionSelector({
               type="button"
               onClick={() => setValue(c)}
               className={clsx(
-                "flex-1 h-10 rounded-2xl border text-sm font-extrabold transition bg-white",
+                "flex-1 h-12 rounded-2xl border text-sm font-extrabold transition bg-white",
                 selected
                   ? "border-blue-500 text-blue-600"
                   : "border-gray-200 text-gray-700"

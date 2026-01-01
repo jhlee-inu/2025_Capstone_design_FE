@@ -6,6 +6,7 @@ import useSignupStore from "../stores/useSignupStore";
 import Modal from "../components/auth/Modal";
 import NicknameField from "../components/auth/NicknameField";
 import BirthField from "../components/auth/BirthField";
+import GenderSelector from "../components/auth/GenderSelector";
 import MbtiField from "../components/auth/MbtiField";
 import PhotoUpload from "../components/auth/PhotoUpload";
 import CompanionSelector from "../components/auth/CompanionSelector";
@@ -29,6 +30,7 @@ export default function InfoInput() {
     nicknameChecked,
     nicknameAvailable,
     birth,
+    gender,
     mbti,
     photoFile,
     skipPhoto,
@@ -36,11 +38,13 @@ export default function InfoInput() {
     sasangResult,
     personaKey,
     patch,
+    resetForm,
   } = useSignupStore((s) => ({
     nickname: s.nickname,
     nicknameChecked: s.nicknameChecked,
     nicknameAvailable: s.nicknameAvailable,
     birth: s.birth,
+    gender: s.gender,
     mbti: s.mbti,
     photoFile: s.photoFile,
     skipPhoto: s.skipPhoto,
@@ -48,6 +52,7 @@ export default function InfoInput() {
     sasangResult: s.sasangResult,
     personaKey: s.personaKey,
     patch: s.patch,
+    resetForm: s.resetForm,
   }));
 
   // ==== UI 로컬 상태 ====
@@ -58,7 +63,23 @@ export default function InfoInput() {
 
   // ===== validation =====
   const nicknameValid = nickname.trim().length >= 2;
-  const birthValid = /^\d{6}$/.test(birth);
+  const birthValid = useMemo(() => {
+    if (!/^\d{6}$/.test(birth)) return false;
+
+    const year = parseInt(birth.substring(0, 2));
+    const month = parseInt(birth.substring(2, 4));
+    const day = parseInt(birth.substring(4, 6));
+
+    if (month < 1 || month > 12) return false;
+
+    if (day < 1 || day > 31) return false;
+
+    const daysInMonth = new Date(year + 2000, month, 0).getDate();
+    if (day > daysInMonth) return false;
+    
+    return true;
+  }, [birth]);
+
   const mbtiValid = /^[EI][NS][FT][PJ]$/i.test(mbti.trim());
 
   const onNicknameChange = (v) => {
@@ -72,7 +93,7 @@ export default function InfoInput() {
   const checkNickname = () => {
     if (!nicknameValid) return;
 
-    // 중복검사 (임시) 
+    // 중복검사 (임시)
     const ok = !nickname.includes("사용자");
 
     patch({
@@ -89,6 +110,7 @@ export default function InfoInput() {
     return (
       nicknameOk &&
       birthValid &&
+      gender &&
       mbtiValid &&
       !!companion &&
       !!sasangResult &&
@@ -99,6 +121,7 @@ export default function InfoInput() {
     nicknameChecked,
     nicknameAvailable,
     birthValid,
+    gender,
     mbtiValid,
     companion,
     sasangResult,
@@ -109,9 +132,11 @@ export default function InfoInput() {
     if (!canSubmit) return;
 
     // PersonaContext에 반영
-    setPersona(personaKey)
+    setPersona(personaKey);
 
     // 가입 정보 POST
+    // 폼 초기화
+    resetForm();
     navigate("/home");
   };
 
@@ -155,6 +180,11 @@ export default function InfoInput() {
           valid={birthValid}
         />
 
+        <GenderSelector
+          value={gender}
+          onChange={(v) => patch({ gender: v })}
+        />
+
         <MbtiField
           value={mbti}
           setValue={(v) => patch({ mbti: v })}
@@ -185,8 +215,7 @@ export default function InfoInput() {
         {/* 페르소나 선택 페이지로 이동 */}
         <PersonaButton
           value={personaKey}
-          onClick={() =>
-            navigate("/persona")}
+          onClick={() => navigate("/persona")}
         />
 
         <div className="h-10" />

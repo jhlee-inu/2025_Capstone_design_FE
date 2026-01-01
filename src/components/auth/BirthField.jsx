@@ -1,4 +1,3 @@
-import Label from "./Label";
 import InputBox from "./InputBox";
 
 export default function BirthField({
@@ -11,7 +10,9 @@ export default function BirthField({
 }) {
   return (
     <div>
-      <Label>나이</Label>
+      <div className="mt-6 mb-2 text-sm font-extrabold">
+        나이
+      </div>
       <InputBox active={active || value} error={value && !valid}>
         <input
           value={value}

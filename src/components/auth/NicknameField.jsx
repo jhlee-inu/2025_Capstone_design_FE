@@ -1,4 +1,3 @@
-import Label from "./Label";
 import InputBox from "./InputBox";
 
 function clsx(...arr) {
@@ -20,7 +19,9 @@ export default function NicknameField({
 
   return (
     <div>
-      <Label>닉네임</Label>
+      <div className="mt-6 mb-2 text-sm font-extrabold">
+        닉네임
+      </div>
 
       <div className="flex gap-2 items-start">
         <div className="flex-1">
@@ -33,6 +34,7 @@ export default function NicknameField({
               placeholder="사용자"
               className="flex-1 outline-none bg-transparent text-sm font-semibold"
             />
+
             {value && (
               <button
                 type="button"
@@ -50,6 +52,7 @@ export default function NicknameField({
                 사용할 수 없는 아이디입니다.
               </p>
             )}
+
             {checked && available === true && (
               <p className="text-xs font-semibold text-blue-600">
                 사용할 수 있는 아이디입니다.
@@ -63,7 +66,7 @@ export default function NicknameField({
           disabled={!canCheck}
           onClick={onCheck}
           className={clsx(
-            "h-12 px-4 rounded-2xl border text-sm font-extrabold",
+            "h-12 px-4 rounded-2xl border text-sm font-extrabold transition",
             canCheck
               ? "border-blue-500 text-blue-600"
               : "border-gray-200 text-gray-400"

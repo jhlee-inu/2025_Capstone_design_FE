@@ -1,4 +1,3 @@
-import Label from "./Label";
 import InputBox from "./InputBox";
 
 export default function MbtiField({
@@ -11,7 +10,10 @@ export default function MbtiField({
 }) {
   return (
     <div>
-      <Label>MBTI</Label>
+      <div className="mt-6 mb-2 text-sm font-extrabold">
+        MBTI
+      </div>
+
       <InputBox active={active || value} error={value && !valid}>
         <input
           value={value}
@@ -21,6 +23,7 @@ export default function MbtiField({
           placeholder="MBTI 4글자"
           className="flex-1 outline-none bg-transparent text-sm font-semibold"
         />
+
         {value && (
           <button
             type="button"

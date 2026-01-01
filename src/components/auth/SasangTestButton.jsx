@@ -1,6 +1,3 @@
-import React from "react";
-import Label from "./Label";
-
 function clsx(...arr) {
   return arr.filter(Boolean).join(" ");
 }
@@ -10,7 +7,9 @@ export default function SasangTestButton({ value, onClick }) {
 
   return (
     <div>
-      <Label>사상의학</Label>
+      <div className="mt-6 mb-2 text-sm font-extrabold">
+        사상의학 테스트
+      </div>
 
       <button
         type="button"

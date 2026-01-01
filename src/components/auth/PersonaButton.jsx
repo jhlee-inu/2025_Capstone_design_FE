@@ -1,16 +1,22 @@
-import React from "react";
-import Label from "./Label";
-
 function clsx(...arr) {
   return arr.filter(Boolean).join(" ");
 }
+
+const PERSONA_LABEL = {
+  rabbit: "토끼",
+  bear: "곰",
+  cat: "고양이",
+  panda: "판다",
+};
 
 export default function PersonaButton({ value, onClick }) {
   const selected = !!value;
 
   return (
     <div>
-      <Label>페르소나</Label>
+      <div className="mt-6 mb-2 text-sm font-extrabold">
+        페르소나
+      </div>
 
       <button
         type="button"
@@ -22,7 +28,7 @@ export default function PersonaButton({ value, onClick }) {
             : "border-gray-200 text-gray-900"
         )}
       >
-        {selected ? `페르소나 선택: ${value}` : "페르소나 선택"}
+        {selected ? `페르소나 선택: ${PERSONA_LABEL[value]}` : "페르소나 선택"}
       </button>
     </div>
   );

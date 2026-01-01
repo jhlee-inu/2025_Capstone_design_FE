@@ -1,5 +1,3 @@
-import Label from "./Label";
-
 export default function PhotoUpload({
   photoFile,
   setPhotoFile,
@@ -8,7 +6,9 @@ export default function PhotoUpload({
 }) {
   return (
     <div>
-      <Label>프로필 사진 등록</Label>
+      <div className="mt-6 mb-2 text-sm font-extrabold">
+        프로필 사진 등록
+      </div>
 
       <div className="flex gap-3">
         <label
