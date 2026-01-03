@@ -19,7 +19,7 @@ function App() {
   }, []);
   return (
     <div
-      className="bg-gray-100"
+      className="bg-gray-100 font-sans"
       style={{ minHeight: "var(--app-height, 100vh)" }}
     >
       <div

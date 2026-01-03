@@ -8,6 +8,9 @@ import SasangTest from "../pages/SasangTest";
 import SasangResult from "../pages/SasangResult";
 import Persona from "../pages/Persona";
 import Mypage from "../pages/MyPage";
+import MyPageEdit from "../pages/MyPageEdit";
+import MyPageChat from "../pages/MyPageChat";
+import MyPageFavorites from "../pages/MyPageFavorites";
 import Trip from "../pages/Trip";
 import Direction from "../pages/Direction";
 import TripEdit from "../pages/TripEdit";
@@ -17,7 +20,7 @@ const AppRouter = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/oauth/callback" element={<OAuthCallback />} />
         <Route path="/agree" element={<Agree />} />
@@ -28,6 +31,9 @@ const AppRouter = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/direction" element={<Direction />} />
         <Route path="/mypage" element={<Mypage />} />
+        <Route path="/mypage/edit" element={<MyPageEdit />} />
+        <Route path="/mypage/chats" element={<MyPageChat />} />
+        <Route path="/mypage/favorites" element={<MyPageFavorites />} />
         <Route path="/trip" element={<Trip />} />
         <Route path="/trip/edit" element={<TripEdit />} />
         <Route path="/trip/add/place" element={<TripAdd type="place" />} />

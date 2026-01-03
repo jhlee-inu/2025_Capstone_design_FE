@@ -16,10 +16,50 @@ function Agree() {
   // 필수 동의 완료 여부 (버튼 활성화 조건)
   const requiredChecked = useMemo(() => terms && privacy, [terms, privacy]);
 
+  const locationOptions = {
+    enableHighAccuracy: true,
+    timeout: 10000,
+    maximumAge: 0,
+  };
+
+  const requestLocationPermission = () => {
+    if (!navigator.geolocation) {
+      window.alert("Geolocation is not supported in this browser.");
+      return Promise.reject(new Error("geolocation-unsupported"));
+    }
+
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(
+        () => resolve(),
+        (err) => {
+          window.alert("Location permission was not granted.");
+          reject(err);
+        },
+        locationOptions
+      );
+    });
+  };
+
+  const handleLocationChange = (checked) => {
+    if (!checked) {
+      setLocation(false);
+      return;
+    }
+
+    setLocation(true);
+    requestLocationPermission().catch(() => setLocation(false));
+  };
+
   const toggleAll = (checked) => {
     setTerms(checked);
     setPrivacy(checked);
-    setLocation(checked);
+    if (!checked) {
+      setLocation(false);
+      return;
+    }
+
+    setLocation(true);
+    requestLocationPermission().catch(() => setLocation(false));
   };
 
   const onSubmit = () => {
@@ -74,10 +114,10 @@ function Agree() {
           />
 
           <AgreeItem
-            required={false}
+            required
             label="위치기반 서비스 이용약관 동의"
             checked={location}
-            onChange={setLocation}
+            onChange={handleLocationChange}
           />
         </div>
       </main>
