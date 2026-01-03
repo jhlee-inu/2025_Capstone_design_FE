@@ -1,8 +1,14 @@
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { usePersona } from "../context/PersonaContext";
 
-function ChatbotSheet({ onClose }) {
+function ChatbotSheet({ onClose, initialPrompt = "" }) {
   const { persona } = usePersona();
+  const [inputValue, setInputValue] = useState(initialPrompt);
+
+  useEffect(() => {
+    setInputValue(initialPrompt);
+  }, [initialPrompt]);
 
   const chatpersonaImages = {
     bear: "/src/assets/chat bear.png",
@@ -83,6 +89,8 @@ function ChatbotSheet({ onClose }) {
           <input
             className="w-full px-4 py-2 rounded-full bg-orange-100 text-sm outline-none"
             placeholder="인천에 대해 물어보세요."
+            value={inputValue}
+            onChange={(event) => setInputValue(event.target.value)}
           />
         </div>
 

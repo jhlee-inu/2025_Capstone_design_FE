@@ -5,11 +5,11 @@ import { GoHomeFill } from "react-icons/go"; //home icon
 import { IoPersonSharp } from "react-icons/io5"; //mypage icon
 function BottomTab() {
   const tabStyle = ({ isActive }) =>
-    `flex flex-col items-center justify-center flex-1 gap-1
+    `flex flex-col items-center justify-center flex-1 gap-1 py-2
      ${isActive ? "text-black" : "text-gray-400"}`;
 
   return (
-    <nav className="h-16 border-t bg-white flex">
+    <nav className="flex h-full border-t bg-white ">
       <NavLink to="/home" className={tabStyle}>
         <GoHomeFill size={22} />
         <span className="text-xs">홈</span>
