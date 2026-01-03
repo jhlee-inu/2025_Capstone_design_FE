@@ -7,10 +7,10 @@ import bearHero from "../assets/bear.png";
 import rabbitHero from "../assets/rabbit.png";
 import pandaHero from "../assets/panda.png";
 import catHero from "../assets/cat.png";
-import bearThumb from "../assets/chat bear.png";
-import rabbitThumb from "../assets/chat rabbit.png";
-import pandaThumb from "../assets/chat panda.png";
-import catThumb from "../assets/chat cat.png";
+import bearThumb from "../assets/bear chat.png";
+import rabbitThumb from "../assets/rabbit chat.png";
+import pandaThumb from "../assets/panda chat.png";
+import catThumb from "../assets/cat chat.png";
 import { FaArrowLeft } from "react-icons/fa6";
 
 function clsx(...arr) {

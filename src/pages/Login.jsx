@@ -2,7 +2,7 @@ import sasang from "../assets/sasang.png";
 import kakaoIcon from "../assets/kakao.png";
 import googleIcon from "../assets/google.png";
 import { useLanguage } from "../context/LanguageContext";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 import LoginHeader from "../components/auth/LoginHeader";
 
 const TEXT = {
@@ -23,7 +23,7 @@ const TEXT = {
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 function Login() {
   const { language } = useLanguage();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   // const handleKakao = () => navigate("/agree");
   // const handleGoogle = () => navigate("/agree");
