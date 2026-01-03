@@ -5,6 +5,8 @@ import CameraOverlay from "../components/CameraOverlay";
 import cafeMarker from "../assets/map/cafe_marker.png";
 import foodMarker from "../assets/map/food_marker.png";
 import randMarker from "../assets/map/rand_marker.png";
+import malePin from "../assets/map/m_pin.png";
+import femalePin from "../assets/map/w_pin.png";
 import firstPin from "../assets/route pin/first.png";
 import secondPin from "../assets/route pin/second.png";
 import thirdPin from "../assets/route pin/third.png";
@@ -13,6 +15,7 @@ import fifthPin from "../assets/route pin/fifth.png";
 import { loadKakaoMap } from "../utils/loadKakaoMap";
 import AppLayout from "../layouts/AppLayout";
 import { useCallback, useEffect, useRef, useState } from "react";
+import useSignupStore from "../stores/useSignupStore";
 
 const CATEGORY_MARKERS = {
   food: foodMarker,
@@ -76,6 +79,7 @@ function Home() {
   const [mapReady, setMapReady] = useState(false); //지도 준비 여부
   const [activeCategory, setActiveCategory] = useState(null); //음식점 카페 관광지 카테고리
   const [routeActive, setRouteActive] = useState(false);
+  const gender = useSignupStore((s) => s.gender);
 
   const sampleRoute = [
     { lat: 37.3882, lng: 126.6425 },
@@ -182,18 +186,18 @@ function Home() {
     }
   }, []);
 
-  const renderRouteMarkers = useCallback(() => {
+  const renderRouteMarkers = useCallback(() => { //경로 마커 렌더링
     if (!kakaoRef.current || !mapRef.current) return;
     clearRouteMarkers();
 
     const kakao = kakaoRef.current;
     const map = mapRef.current;
 
-    sampleRoute.forEach((point, index) => {
+    sampleRoute.forEach((point, index) => { 
       const position = new kakao.maps.LatLng(point.lat, point.lng);
       const imageSrc = ROUTE_PINS[index] || ROUTE_PINS[ROUTE_PINS.length - 1];
       const imageSize = new kakao.maps.Size(32, 32);
-      const imageOption = { offset: new kakao.maps.Point(16, 16) };
+      const imageOption = { offset: new kakao.maps.Point(20, 16) };
       const markerImage = new kakao.maps.MarkerImage(
         imageSrc,
         imageSize,
@@ -545,13 +549,23 @@ function Home() {
       if (!best || !kakao || !map) return;
       const { latitude, longitude } = best;
       const latlng = new kakao.maps.LatLng(latitude, longitude);
+      const imageSrc = gender === "F" ? femalePin : malePin;
+      const imageSize = new kakao.maps.Size(47, 60); // 마커 이미지 크기
+      const imageOption = { offset: new kakao.maps.Point(24, 60) }; // 마커 이미지 기준점
+      const markerImage = new kakao.maps.MarkerImage(
+        imageSrc,
+        imageSize,
+        imageOption
+      );
       map.setCenter(latlng);
+      map.setLevel(3);
 
       if (markerRef.current) {
         markerRef.current.setPosition(latlng);
       } else {
         markerRef.current = new kakao.maps.Marker({
           position: latlng,
+          image: markerImage,
           map,
         });
       }

@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
 import { AiFillPlusCircle } from "react-icons/ai";
+import { HiStar } from "react-icons/hi";
 import AppLayout from "../layouts/AppLayout";
 function TripAdd({ type }) {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ function TripAdd({ type }) {
         </header>
       }
     >
-      <div className="min-h-full bg-white-50">
+      <div className="min-h-full bg-white">
         {/* 검색 */}
         <div className="px-4 py-6 bg-white ">
           <input
@@ -30,23 +31,30 @@ function TripAdd({ type }) {
         </div>
 
         {/* 리스트 */}
-        <div className="px-4 py-5 space-y-3">
+        <div className="px-4 space-y-2">
           {[1, 2, 3, 4].map((i) => (
             <div
               key={i}
-              className="bg-gray-100 rounded-xl p-4 flex justify-between"
+              className="rounded-2xl bg-gray-100 px-4 py-3 shadow-sm border border-gray-100 flex items-start justify-between gap-3"
             >
-              <div className="text-sm space-y-1">
-                <p className="font-bold">더몰트하우스 인천송도점</p>
-                <p className="text-xs text-gray-500">? 4.6</p>
-                <p className="text-xs text-gray-400">인천 연수구 센트럴로 305</p>
-                <p className="text-xs text-orange-400">
+              <div>
+                <p className="text-sm font-semibold text-gray-900">
+                  더몰트하우스 인천송도점
+                </p>
+                <div className="mt-1 flex items-center gap-1 text-xs text-gray-700">
+                  <HiStar className="text-orange-400" />
+                  <span>4.6</span>
+                </div>
+                <p className="mt-1 text-xs text-gray-900">
+                  인천 연수구 센트럴로 305
+                </p>
+                <p className="mt-1 text-xs text-orange-400">
                   자세한 정보 (구글맵 링크)
                 </p>
               </div>
 
-              <button className="w-8 h-8 rounded-full text-orange-400 flex items-center justify-center shrink-0">
-                <AiFillPlusCircle size={25} />
+              <button className="text-orange-400 flex items-center justify-center shrink-0">
+                <AiFillPlusCircle size={24} />
               </button>
             </div>
           ))}

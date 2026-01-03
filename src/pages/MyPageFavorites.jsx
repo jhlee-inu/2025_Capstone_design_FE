@@ -45,7 +45,7 @@ function MyPageFavorites() {
         </header>
       }
     >
-      <div className="min-h-full bg-white px-4 py-6 font-medium">
+      <div className="min-h-full bg-white px-4 py-3 font-medium">
         <div className="flex items-center justify-between text-sm text-black">
           <span>전체 {favorites.length}</span>
           <div className="flex items-center gap-2">
@@ -65,25 +65,25 @@ function MyPageFavorites() {
           </div>
         </div>
 
-        <div className="mt-4 space-y-3 text-black">
+        <div className="mt-5 space-y-2 text-black">
           {favorites.map((item, index) => (
             <div
               key={`${item.name}-${index}`}
-              className="rounded-2xl bg-gray-100 px-4 py-4 shadow-sm border border-gray-100"
+              className="rounded-2xl bg-gray-100 px-4 py-3 shadow-sm border border-gray-100"
             >
               <div className="flex items-start text-black justify-between gap-3">
                 <div>
-                  <p className="text-base font-semibold text-gray-900">
+                  <p className="text-sm font-semibold text-gray-900">
                     {item.name}
                   </p>
-                  <div className="mt-2 flex items-center gap-1 text-sm text-gray-700">
+                  <div className="mt-1 flex items-center gap-1 text-xs text-gray-700">
                     <HiStar className="text-orange-400" />
                     <span>{item.rating}</span>
                   </div>
-                  <p className="mt-2 text-sm text-gray-900">{item.address}</p>
+                  <p className="mt-1 text-xs text-gray-900">{item.address}</p>
                   <button
                     type="button"
-                    className="mt-2 text-xs text-orange-400"
+                    className="mt-1 text-xs text-orange-400"
                   >
                     {item.link}
                   </button>
