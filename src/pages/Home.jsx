@@ -634,6 +634,12 @@ function Home() {
       <div className="relative w-full h-full overflow-hidden">
         {/* 지도 */}
         <div id="map" className="w-full h-full" />
+        {!mapReady && (
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center">
+            <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-gray-500" />
+            <p className="mt-2 text-sm text-gray-600">지도 로딩 중...</p>
+          </div>
+        )}
         {/* 오버레이 및 챗봇 */}
         <MapOverlay
           onMoveToMyLocation={handleMoveToMyLocation}

@@ -11,13 +11,13 @@ function ChatbotSheet({ onClose, initialPrompt = "" }) {
   }, [initialPrompt]);
 
   const chatpersonaImages = {
-    bear: "/src/assets/chat bear.png",
-    cat: "/src/assets/chat cat.png",
-    panda: "/src/assets/chat panda.png",
-    rabbit: "/src/assets/chat rabbit.png",
+    bear: "/src/assets/bear chat.png",
+    cat: "/src/assets/cat chat.png",
+    panda: "/src/assets/panda chat.png",
+    rabbit: "/src/assets/rabbit chat.png",
   };
 
-  const avatarSrc = chatpersonaImages[persona] || "/src/assets/chat bear.png";
+  const avatarSrc = chatpersonaImages[persona] || "/src/assets/bear chat.png";
   return (
     // 배경
     <motion.div
