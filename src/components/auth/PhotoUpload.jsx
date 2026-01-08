@@ -6,9 +6,7 @@ export default function PhotoUpload({
 }) {
   return (
     <div>
-      <div className="mt-6 mb-2 text-sm font-extrabold">
-        프로필 사진 등록
-      </div>
+      <div className="mt-6 mb-2 text-sm font-extrabold">프로필 사진 등록</div>
 
       <div className="flex gap-3">
         <label
@@ -20,7 +18,7 @@ export default function PhotoUpload({
           <input
             type="file"
             accept="image/*"
-            capture="environment"
+            capture="user"
             className="hidden"
             onChange={(e) => {
               const file = e.target.files?.[0];
@@ -43,7 +41,7 @@ export default function PhotoUpload({
             "font-extrabold text-sm transition",
             skipPhoto
               ? "border-blue-500 text-blue-600"
-              : "border-gray-200 text-gray-400",
+              : "border-gray-200 text-gray-700",
           ].join(" ")}
         >
           건너뛰기

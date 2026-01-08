@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { usePersona } from "../context/PersonaContext";
 import useSignupStore from "../stores/useSignupStore";
 
-import Modal from "../components/auth/Modal";
 import NicknameField from "../components/auth/NicknameField";
 import BirthField from "../components/auth/BirthField";
 import GenderSelector from "../components/auth/GenderSelector";
@@ -57,7 +56,6 @@ export default function InfoInput() {
 
   // ==== UI 로컬 상태 ====
   const [active, setActive] = useState("");
-  const [sasangOpen, setSasangOpen] = useState(false);
 
   const companions = ["혼자", "가족", "연인", "친구"];
 
@@ -76,7 +74,7 @@ export default function InfoInput() {
 
     const daysInMonth = new Date(year + 2000, month, 0).getDate();
     if (day > daysInMonth) return false;
-    
+
     return true;
   }, [birth]);
 
@@ -209,7 +207,7 @@ export default function InfoInput() {
 
         <SasangTestButton
           value={sasangResult}
-          onClick={() => setSasangOpen(true)}
+          onClick={() => navigate("/sasang-test")}
         />
 
         {/* 페르소나 선택 페이지로 이동 */}
@@ -237,26 +235,6 @@ export default function InfoInput() {
           가입 완료
         </button>
       </div>
-
-      {/* 사상의학 모달 */}
-      {sasangOpen && (
-        <Modal title="사상의학 테스트" onClose={() => setSasangOpen(false)}>
-          <div className="grid grid-cols-2 gap-2">
-            {["태양인", "태음인", "소양인", "소음인"].map((v) => (
-              <button
-                key={v}
-                onClick={() => {
-                  patch({ sasangResult: v });
-                  setSasangOpen(false);
-                }}
-                className="h-12 rounded-2xl border font-extrabold"
-              >
-                {v}
-              </button>
-            ))}
-          </div>
-        </Modal>
-      )}
     </div>
   );
 }
