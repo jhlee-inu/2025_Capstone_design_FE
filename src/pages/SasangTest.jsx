@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import useSignupStore from "../stores/useSignupStore";
 import { FaArrowLeft } from "react-icons/fa6";
 
@@ -158,11 +158,23 @@ const QUESTIONS = [
 
 function SasangTest() {
   const navigate = useNavigate();
+  const location = useLocation();
   const patch = useSignupStore((state) => state.patch);
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
   const [answers, setAnswers] = useState(() => Array(QUESTIONS.length).fill(null));
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isAllAnswered = useMemo(() => answers.every((v) => v !== null), [answers]);
+  const isEditFlow = location.state?.mode === "edit";
+  const returnPath =
+    location.state?.from || (isEditFlow ? "/mypage/edit" : "/InfoInput");
+  const sasangLabelMap = {
+    TAEYANG: "태양인",
+    SOYANG: "소양인",
+    TAEUM: "태음인",
+    SOEUM: "소음인",
+  };
 
   const handleSelect = (qIndex, optIndex) => {
     setAnswers((prev) => {
@@ -172,31 +184,79 @@ function SasangTest() {
     });
   };
 
-  const handleSubmit = () => {
-    if (!isAllAnswered) return;
+  const handleSubmit = async () => {
+    if (!isAllAnswered || isSubmitting) return;
 
-    // 정리한 결과
-    const payload = QUESTIONS.map((q, i) => ({
-      questionId: q.id,
-      selectedOption: answers[i] + 1,
-    }));
+    if (!baseUrl) {
+      console.warn("VITE_API_BASE_URL is not set.");
+      return;
+    }
 
-    console.log("사상의학 설문 결과(payload)", payload);
-  
-    // post 요청
-
-    // 임시(Mock) 결과
-    const mockResult = {
-      type: "소양인",
-      message:
-        "활동적이고 열정적인 성향이 강해요.\n새로운 여행과 경험을 좋아하는 타입이에요!",
+    const payload = {
+      answers: QUESTIONS.map((q, i) => ({
+        questionId: q.id,
+        answer: answers[i] + 1,
+      })),
     };
 
-    patch({ sasangResult: mockResult.type });
+    try {
+      setIsSubmitting(true);
+      const accessToken = localStorage.getItem("accessToken") || "";
+      const tokenType = localStorage.getItem("tokenType") || "Bearer";
 
-    navigate("/sasang-result", { state: { sasangResult: mockResult } });
-  
-  
+      const endpoint = isEditFlow
+        ? `${baseUrl}/api/my-info/profile/sasang`
+        : `${baseUrl}/api/onboarding/sasang/result`;
+      const method = isEditFlow ? "PATCH" : "POST";
+
+      const response = await fetch(endpoint, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "ngrok-skip-browser-warning": "true",
+          ...(accessToken
+            ? { Authorization: `${tokenType} ${accessToken}` }
+            : {}),
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        console.error("sasang result failed:", response.status, text);
+        return;
+      }
+
+      const data = await response.json();
+      const rawType =
+        data?.sasangType ||
+        data?.sasang ||
+        data?.type ||
+        data?.result?.sasangType ||
+        data?.result?.sasang ||
+        data?.result?.type;
+      const message = data?.message || data?.result?.message || "";
+      const normalizedType = sasangLabelMap[rawType] || rawType || "";
+
+      if (normalizedType && !isEditFlow) {
+        patch({ sasangResult: normalizedType });
+      }
+
+      navigate("/sasang-result", {
+        state: {
+          sasangResult: {
+            type: normalizedType,
+            message,
+          },
+          from: returnPath,
+        },
+      });
+    } catch (e) {
+      console.error("sasang result error:", e);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -263,15 +323,15 @@ function SasangTest() {
         <button
           type="button"
           onClick={handleSubmit}
-          disabled={!isAllAnswered}
+          disabled={!isAllAnswered || isSubmitting}
           className={[
             "h-14 w-full rounded-2xl font-extrabold transition-colors",
-            isAllAnswered
+            isAllAnswered && !isSubmitting
               ? "bg-blue-600 text-white"
               : "bg-gray-300 text-white cursor-not-allowed",
           ].join(" ")}
         >
-          결과 보기
+          {isSubmitting ? "계산 중..." : "결과 보기"}
         </button>
       </div>
     </div>

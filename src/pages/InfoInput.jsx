@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePersona } from "../context/PersonaContext";
+import { useLanguage } from "../context/LanguageContext";
 import useSignupStore from "../stores/useSignupStore";
 
 import NicknameField from "../components/auth/NicknameField";
@@ -22,6 +23,9 @@ export default function InfoInput() {
 
   // ==== Context ====
   const { setPersona } = usePersona();
+  const { language } = useLanguage();
+
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
   // ==== zustand store 상태 ====
   const {
@@ -58,6 +62,18 @@ export default function InfoInput() {
   const [active, setActive] = useState("");
 
   const companions = ["혼자", "가족", "연인", "친구"];
+  const companionCodeMap = {
+    [companions[0]]: "SOLO",
+    [companions[1]]: "FAMILY",
+    [companions[2]]: "COUPLE",
+    [companions[3]]: "FRIEND",
+  };
+  const sasangCodeMap = {
+    태양인: "TAEYANG",
+    소양인: "SOYANG",
+    태음인: "TAEUM",
+    소음인: "SOEUM",
+  };
 
   // ===== validation =====
   const nicknameValid = nickname.trim().length >= 2;
@@ -88,17 +104,55 @@ export default function InfoInput() {
     });
   };
 
-  const checkNickname = () => {
-    if (!nicknameValid) return;
+    const checkNickname = async () => {
+      if (!nicknameValid) return;
 
-    // 중복검사 (임시)
-    const ok = !nickname.includes("사용자");
+      try {
+        const accessToken = localStorage.getItem("accessToken") || "";
+        const tokenType = localStorage.getItem("tokenType") || "Bearer";
 
-    patch({
-      nicknameChecked: true,
-      nicknameAvailable: ok,
-    });
-  };
+        console.log("tokenType:", tokenType);
+        console.log("accessToken length:", accessToken?.length);
+
+        const response = await fetch(
+          `${baseUrl}/api/onboarding/check?nickname=${encodeURIComponent(nickname)}`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "ngrok-skip-browser-warning": "true",
+              ...(accessToken
+                ? { Authorization: `${tokenType} ${accessToken}` }
+                : {}),
+            },
+          },
+        );
+
+        console.log("status:", response.status);
+        console.log("content-type:", response.headers.get("content-type"));
+
+        const raw = await response.text();
+        const title = raw.match(/<title>(.*?)<\/title>/i)?.[1];
+        console.log("raw response:", raw.slice(0, 1000));
+        console.log("HTML title:", title);
+
+        // ✅ 여기서 raw를 JSON으로 다시 파싱
+        const data = JSON.parse(raw);
+
+        const available = data?.isOk === true;
+
+        patch({
+          nicknameChecked: true,
+          nicknameAvailable: available,
+        });
+      } catch (e) {
+        console.log("checkNickname error:", e);
+        patch({
+          nicknameChecked: true,
+          nicknameAvailable: false,
+        });
+      }
+    };
 
   // ===== 가입 가능 여부 =====
   const canSubmit = useMemo(() => {
@@ -126,11 +180,54 @@ export default function InfoInput() {
     personaKey,
   ]);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (!canSubmit) return;
 
     // PersonaContext에 반영
     setPersona(personaKey);
+
+    const accessToken = localStorage.getItem("accessToken") || "";
+    const tokenType = localStorage.getItem("tokenType") || "Bearer";
+    const selectedPersona = personaKey
+      ? personaKey.startsWith("persona_")
+        ? personaKey
+        : `${personaKey}`.toUpperCase()
+      : "";
+    const profileImageURL =
+      typeof photoFile === "string" && photoFile.length > 0 ? photoFile : null;
+
+    const payload = {
+      nickname: nickname.trim(),
+      birthDate: birth,
+      mbti: mbti.trim().toUpperCase(),
+      profileImageURL,
+      companion: companionCodeMap[companion] || companion,
+      sasang: sasangCodeMap[sasangResult] || sasangResult,
+      selectedPersona,
+      lang: language === "ENG" ? "eng" : "kor",
+    };
+
+    try {
+      const response = await fetch(`${baseUrl}/api/onboarding/complete`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "ngrok-skip-browser-warning": "true",
+          ...(accessToken ? { Authorization: `${tokenType} ${accessToken}` } : {}),
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        console.error("onboarding complete failed:", response.status, text);
+        return;
+      }
+    } catch (e) {
+      console.error("onboarding complete error:", e);
+      return;
+    }
 
     // 가입 정보 POST
     // 폼 초기화
@@ -178,10 +275,7 @@ export default function InfoInput() {
           valid={birthValid}
         />
 
-        <GenderSelector
-          value={gender}
-          onChange={(v) => patch({ gender: v })}
-        />
+        <GenderSelector value={gender} onChange={(v) => patch({ gender: v })} />
 
         <MbtiField
           value={mbti}
@@ -229,7 +323,7 @@ export default function InfoInput() {
             "h-14 w-full rounded-2xl font-extrabold transition",
             canSubmit
               ? "bg-blue-600 text-white"
-              : "bg-gray-300 text-white cursor-not-allowed"
+              : "bg-gray-300 text-white cursor-not-allowed",
           )}
         >
           가입 완료

@@ -82,6 +82,7 @@ const SASANG_RESULT = {
 export default function SasangResult() {
   const navigate = useNavigate();
   const location = useLocation();
+  const returnPath = location.state?.from || "/InfoInput";
 
   // SasangTest에서 navigate("/sasang-result", { state: { sasangResult: mockResult } })로 넘긴 값을 받음
   const result = location.state?.sasangResult;
@@ -137,7 +138,7 @@ export default function SasangResult() {
         <h1 className="flex-1 text-center font-extrabold">테스트 결과</h1>
         <button
           type="button"
-          onClick={() => navigate("/InfoInput")}
+          onClick={() => navigate(returnPath)}
           className="flex items-center justify-center text-2xl leading-none"
         >
           <IoClose size={24} />
@@ -176,7 +177,7 @@ export default function SasangResult() {
       <div className="px-6 pb-14">
         <button
           type="button"
-          onClick={() => navigate("/InfoInput")}
+          onClick={() => navigate(returnPath)}
           className="h-14 w-full rounded-2xl bg-blue-600 text-white font-extrabold"
         >
           돌아가기

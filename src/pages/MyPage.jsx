@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoMdSettings } from "react-icons/io";
 import { BsChatLeftTextFill } from "react-icons/bs";
@@ -21,6 +22,72 @@ function MyPage() {
   const navigate = useNavigate();
   const { persona } = usePersona();
   const avatarSrc = personaImages[persona] || personaImages.bear;
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const [profile, setProfile] = useState({
+    nickname: "",
+    mbti: "",
+    sasang: "",
+  });
+
+  const sasangLabelMap = {
+    TAEYANG: "태양인",
+    SOYANG: "소양인",
+    TAEUM: "태음인",
+    SOEUM: "소음인",
+  };
+
+  useEffect(() => {
+    let active = true;
+
+    const fetchOnboarding = async () => {
+      if (!baseUrl) {
+        console.warn("VITE_API_BASE_URL is not set.");
+        return;
+      }
+
+      try {
+        const accessToken = localStorage.getItem("accessToken") || "";
+        const tokenType = localStorage.getItem("tokenType") || "Bearer";
+
+        const response = await fetch(`${baseUrl}/api/onboarding`, {
+          method: "GET",
+          headers: {    
+            Accept: "application/json",
+            "ngrok-skip-browser-warning": "true",
+            ...(accessToken
+              ? { Authorization: `${tokenType} ${accessToken}` }
+              : {}),
+          },
+        });
+
+        if (!response.ok) {
+          console.error("onboarding fetch failed:", response.status);
+          return;
+        }
+
+        const data = await response.json();
+        if (!active) return;
+
+        setProfile({
+          nickname: data?.nickname || "",
+          mbti: data?.mbti || "",
+          sasang: data?.sasang || "",
+        });
+      } catch (e) {
+        console.error("onboarding fetch error:", e);
+      }
+    };
+
+    fetchOnboarding();
+
+    return () => {
+      active = false;
+    };
+  }, [baseUrl]);
+
+  const sasangLabel = sasangLabelMap[profile.sasang] || profile.sasang || "-";
+  const mbtiLabel = profile.mbti || "-";
+  const nicknameLabel = profile.nickname || "닉네임";
 
   return (
     <AppLayout
@@ -51,17 +118,21 @@ function MyPage() {
                 className="h-20 w-20 object-contain"
               />
             </div>
-            <p className="mt-3 text-base font-semibold text-gray-900">닉네임</p>
+            <p className="mt-3 text-base font-semibold text-gray-900">
+              {nicknameLabel}
+            </p>
             <div className="mt-3 flex w-full max-w-[240px] divide-x overflow-hidden rounded-2xl bg-gray-100 text-center text-xs text-gray-600">
               <div className="flex-1 py-2">
                 <p className="text-[10px] text-gray-400">사상의학</p>
                 <p className="mt-1 text-base font-semibold text-gray-700">
-                  태양인
+                  {sasangLabel}
                 </p>
               </div>
               <div className="flex-1 py-2">
                 <p className="text-[10px] text-gray-400">MBTI</p>
-                <p className="mt-1 text-base font-semibold text-gray-700">ISFP</p>
+                <p className="mt-1 text-base font-semibold text-gray-700">
+                  {mbtiLabel}
+                </p>
               </div>
             </div>
           </div>
