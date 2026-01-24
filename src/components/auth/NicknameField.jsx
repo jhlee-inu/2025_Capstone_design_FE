@@ -24,7 +24,8 @@ export default function NicknameField({
       </div>
 
       <div className="flex gap-2 items-start">
-        <div className="flex-1">
+        <div className="basis-[70%] sm:basis-[75%] shrink-0 min-w-0">
+
           <InputBox active={active || value.length > 0} error={error}>
             <input
               value={value}
@@ -32,14 +33,14 @@ export default function NicknameField({
               onFocus={onFocus}
               onBlur={onBlur}
               placeholder="사용자"
-              className="flex-1 outline-none bg-transparent text-sm font-semibold"
+              className="flex-1 min-w-0 outline-none bg-transparent text-sm font-semibold"
             />
 
             {value && (
               <button
                 type="button"
                 onClick={() => onChange("")}
-                className="ml-2 text-gray-400 text-xl"
+                className="ml-2 shrink-0 text-gray-400 text-xl"
               >
                 ×
               </button>

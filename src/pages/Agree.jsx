@@ -4,17 +4,22 @@ import AgreeItem from "../components/auth/AgreeItem";
 
 function Agree() {
   const navigate = useNavigate();
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
   // 개별 동의
   const [terms, setTerms] = useState(false);     // [필수] 서비스 이용약관
   const [privacy, setPrivacy] = useState(false); // [필수] 개인정보 수집 및 이용
   const [location, setLocation] = useState(false); // [선택] 위치기반
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 전체 동의(필수, 선택 포함)
   const allChecked = useMemo(() => terms && privacy && location, [terms, privacy, location]);
 
   // 필수 동의 완료 여부 (버튼 활성화 조건)
-  const requiredChecked = useMemo(() => terms && privacy, [terms, privacy]);
+  const requiredChecked = useMemo(
+    () => terms && privacy && location,
+    [terms, privacy, location]
+  );
 
   const locationOptions = {
     enableHighAccuracy: true,
@@ -62,10 +67,50 @@ function Agree() {
     requestLocationPermission().catch(() => setLocation(false));
   };
 
-  const onSubmit = () => {
-    if (!requiredChecked) return;
-    // API 
-    navigate("/InfoInput");
+  const onSubmit = async () => {
+    if (!requiredChecked || isSubmitting) return;
+    if (!baseUrl) {
+      console.warn("VITE_API_BASE_URL is not set.");
+      return;
+    }
+
+    const accessToken = localStorage.getItem("accessToken") || "";
+    const tokenType = localStorage.getItem("tokenType") || "Bearer";
+    const payload = {
+      isPrivacyPolicyAgreed: privacy,
+      isLocationServiceAgreed: location,
+      isTermsOfServiceAgreed: terms,
+    };
+
+    try {
+      setIsSubmitting(true);
+      const response = await fetch(`${baseUrl}/api/onboarding/agreements`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "ngrok-skip-browser-warning": "true",
+          ...(accessToken
+            ? { Authorization: `${tokenType} ${accessToken}` }
+            : {}),
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        console.error("agreements save failed:", response.status, text);
+        window.alert("약관 동의 저장에 실패했습니다.");
+        return;
+      }
+
+      navigate("/InfoInput");
+    } catch (error) {
+      console.error("agreements save error:", error);
+      window.alert("약관 동의 저장에 실패했습니다.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -127,15 +172,15 @@ function Agree() {
         <button
           type="button"
           onClick={onSubmit}
-          disabled={!requiredChecked}
+          disabled={!requiredChecked || isSubmitting}
           className={[
             "h-14 w-full rounded-2xl font-extrabold transition",
-            requiredChecked
+            requiredChecked && !isSubmitting
               ? "bg-blue-600 text-white"
               : "bg-gray-300 text-white cursor-not-allowed",
           ].join(" ")}
         >
-          동의하고 가입하기
+          {isSubmitting ? "저장 중..." : "동의하고 가입하기"}
         </button>
       </div>
     </div>

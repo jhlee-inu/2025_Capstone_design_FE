@@ -586,8 +586,6 @@ function Home() {
         }
 
         if (accuracy <= TARGET_ACCURACY || tries >= MAX_TRIES) {
-          navigator.geolocation.clearWatch(locationWatchRef.current);
-          locationWatchRef.current = null;
           if (locationTimeoutRef.current) {
             window.clearTimeout(locationTimeoutRef.current);
             locationTimeoutRef.current = null;
@@ -612,10 +610,6 @@ function Home() {
     );
 
     locationTimeoutRef.current = window.setTimeout(() => {
-      if (locationWatchRef.current !== null) {
-        navigator.geolocation.clearWatch(locationWatchRef.current);
-        locationWatchRef.current = null;
-      }
       updateMarker();
       setLocating(false);
       locationTimeoutRef.current = null;
