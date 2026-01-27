@@ -4,6 +4,17 @@ import './index.css'
 import App from './App.jsx'
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
+const kakaoJsKey = import.meta.env.VITE_KAKAO_JS_KEY;
+
+if (
+  typeof window !== "undefined" &&
+  window.Kakao &&
+  kakaoJsKey &&
+  typeof window.Kakao.isInitialized === "function" &&
+  !window.Kakao.isInitialized()
+) {
+  window.Kakao.init(kakaoJsKey);
+}
 
 if (
   typeof window !== "undefined" &&

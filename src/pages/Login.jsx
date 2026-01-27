@@ -28,6 +28,12 @@ function Login() {
   // const handleKakao = () => navigate("/agree");
   // const handleGoogle = () => navigate("/agree");
   const handleKakao = () => {
+    const redirectUri = `${baseUrl}/oauth/callback/kakao`;
+    if (window.Kakao?.Auth && window.Kakao.isInitialized()) {
+      window.Kakao.Auth.authorize({ redirectUri });
+      return;
+    }
+
     window.location.href = `${baseUrl}/oauth2/authorization/kakao`;
   };
 
