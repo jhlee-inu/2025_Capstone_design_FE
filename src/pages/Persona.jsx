@@ -4,11 +4,11 @@ import { usePersona } from "../context/PersonaContext";
 import useSignupStore from "../stores/useSignupStore";
 
 import bearHero from "../assets/bear.png";
-import rabbitHero from "../assets/rabbit.png";
+import foxHero from "../assets/fox.png";
 import pandaHero from "../assets/panda.png";
 import catHero from "../assets/cat.png";
 import bearThumb from "../assets/bear chat.png";
-import rabbitThumb from "../assets/rabbit chat.png";
+import foxThumb from "../assets/fox chat.png";
 import pandaThumb from "../assets/panda chat.png";
 import catThumb from "../assets/cat chat.png";
 import { FaArrowLeft } from "react-icons/fa6";
@@ -28,13 +28,13 @@ const PERSONAS = [
     key: "bear",
   },
   {
-    id: "토끼",
+    id: "여우",
     desc1: "활발한, 사고적인",
     heroBg: "bg-yellow-100",
     thumbBg: "bg-yellow-50",
-    hero: rabbitHero,
-    thumb: rabbitThumb,
-    key: "rabbit",
+    hero: foxHero,
+    thumb: foxThumb,
+    key: "fox",
   },
   {
     id: "판다",
