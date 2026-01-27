@@ -28,7 +28,7 @@ function Login() {
   // const handleKakao = () => navigate("/agree");
   // const handleGoogle = () => navigate("/agree");
   const handleKakao = () => {
-    const redirectUri = `${baseUrl}/oauth/callback/kakao`;
+    const redirectUri = `${baseUrl}/login/oauth2/code/kakao`;
     if (window.Kakao?.Auth && window.Kakao.isInitialized()) {
       window.Kakao.Auth.authorize({ redirectUri });
       return;
