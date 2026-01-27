@@ -193,12 +193,15 @@ export default function InfoInput() {
         ? personaKey
         : `${personaKey}`.toUpperCase()
       : "";
+    const genderValue =
+      gender === "M" ? "MALE" : gender === "F" ? "FEMALE" : gender;
     const profileImageURL =
       typeof photoFile === "string" && photoFile.length > 0 ? photoFile : null;
 
     const payload = {
       nickname: nickname.trim(),
       birthDate: birth,
+      gender: genderValue,
       mbti: mbti.trim().toUpperCase(),
       profileImageURL,
       companion: companionCodeMap[companion] || companion,
